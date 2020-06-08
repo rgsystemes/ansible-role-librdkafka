@@ -1,0 +1,30 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+platforms:
+  - name: instance
+    output_log: true
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-debian10}-ansible:latest"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    privileged: true
+    pre_build_image: true
+provisioner:
+  name: ansible
+  log: true
+  playbooks:
+    prepare:  ../default/prepare.yml
+    converge: ../default/converge.yml
+    verify:   ../default/verify.yml
+  inventory:
+    group_vars:
+      all:
+        librdkafka_version: "0.9.1"
+verifier:
+  name: ansible

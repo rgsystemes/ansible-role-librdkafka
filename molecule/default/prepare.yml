@@ -1,0 +1,26 @@
+---
+- name: Prepare
+  hosts: instance
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Install python dependencies
+      apt: 
+        name: "{{ item.packages }}"
+        update_cache: yes
+      when: ansible_distribution_release in item.dist
+      loop:
+        - dist:
+            - focal
+          packages: 
+            - python3-minimal
+            - python3-apt
+        - dist:
+            - buster
+            - stretch
+            - bionic
+            - xenial
+          packages:
+            - python-minimal
+            - python-apt
