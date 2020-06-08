@@ -57,8 +57,8 @@
       shell:
         cmd: |
           set -o pipefail
-          ./configure {{ librdkafka_build_opts | default('') }}
-          make -j{{ ansible_processor_cores }}
+          ./configure {{ librdkafka_build_opts | default('') }} && \
+          make -j{{ ansible_processor_cores }} && \
           make install
         chdir: /tmp/librdkafka-{{ librdkafka_version }}/
         warn: no
