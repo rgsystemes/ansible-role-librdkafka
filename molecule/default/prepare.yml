@@ -24,3 +24,11 @@
           packages:
             - python-minimal
             - python-apt
+
+    - name: Ensure python is available in PATH
+      alternatives:
+        name: python
+        link: /usr/bin/python
+        path: /usr/bin/python3
+        priority: 1
+      when: ansible_distribution_release in ['focal']
