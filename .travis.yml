@@ -29,7 +29,6 @@ install:
 
 script:
   - sudo -E pipenv run molecule test
-  - sudo -E pipenv run molecule test -s legacy-version
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
