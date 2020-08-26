@@ -12,12 +12,12 @@
       when: ansible_distribution_release in item.dist
       loop:
         - dist:
+            - buster
             - focal
           packages: 
             - python3-minimal
             - python3-apt
         - dist:
-            - buster
             - stretch
             - bionic
             - xenial

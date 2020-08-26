@@ -40,11 +40,13 @@
         dest: "/tmp/librdkafka.tar.gz"
         checksum: "{{ librdkafka_checksum | default(omit) }}"
         force: "{{ librdkafka_cleanup_if_exists }}"
+        mode: 0775
 
     - name: librdkafka | create destination folder
       file:
         path: /tmp/librdkafka-{{ librdkafka_version }}
         state: directory
+        mode: 0775
 
     - name: librdkafka | extract .tar archive
       unarchive:
@@ -52,6 +54,7 @@
         dest: /tmp/librdkafka-{{ librdkafka_version }}
         extra_opts: [--strip-components=1]
         remote_src: yes
+        mode: 0775
 
     - name: librdkafka | compile source code
       shell:
