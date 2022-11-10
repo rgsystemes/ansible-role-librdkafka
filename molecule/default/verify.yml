@@ -2,10 +2,9 @@
 - name: Verify
   hosts: all
   gather_facts: no
-
   tasks: 
     - name: Look for compiled assets
-      find:
+      ansible.builtin.find:
         path: /usr/local/lib
         pattern: "*rdkafka*"
         file_type: file
@@ -13,5 +12,5 @@
       register: librdkafka_search
 
     - name: Ensure search has results
-      assert:
+      ansible.builtin.assert:
         that: librdkafka_search.matched >= 4
