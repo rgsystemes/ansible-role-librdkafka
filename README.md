@@ -1,16 +1,11 @@
 librdkafka
 =========
 
-[![Build Status](https://travis-ci.com/rgsystemes/ansible-role-librdkafka.svg?branch=master)](https://travis-ci.com/rgsystemes/ansible-role-librdkafka)
-
 Installs [edenhill/librdkafka](https://github.com/edenhill/librdkafka) from sources on **Debian/Ubuntu**. 
 
 Tested with :
-- Debian 10.x :heavy_check_mark:
-- Debian 9.x :heavy_check_mark:
-- Ubuntu 20.04.x :heavy_check_mark:
-- Ubuntu 18.04.x :heavy_check_mark:
-- Ubuntu 16.04.x :heavy_check_mark:
+  - Debian 11.x ✔️
+  - Ubuntu 22.04.x ✔️ 
 
 Role Variables
 --------------
@@ -18,7 +13,7 @@ Role Variables
 ```yaml
 ---
 librdkafka_cleanup_if_exists: false # Turn to true if you wish to overwrite existing assets (weither it comes from source or apt). Usefull for upgrade/downgrade.
-librdkafka_version: v1.4.2 # the release number to get from GitHub. See: https://github.com/edenhill/librdkafka/releases 
+librdkafka_version: v1.9.2 # the release number to get from GitHub. See: https://github.com/edenhill/librdkafka/releases 
 # librdkafka_checksum: # specify matching SHA256's checksum if you want to
 # librdkafka_build_opts: # See: https://github.com/edenhill/librdkafka#building 
 

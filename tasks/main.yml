@@ -1,6 +1,6 @@
 ---
-- name: librdkafka | ensure build requirements are met
-  apt:
+- name: Librdkafka | ensure build requirements are met
+  ansible.builtin.apt:
     name:
       - bash
       - build-essential
@@ -10,54 +10,55 @@
       - libssl-dev
     state: present
 
-- name: librdkafka | check for existing installations
-  find:
+- name: Librdkafka | check for existing installations
+  ansible.builtin.find:
     path: /usr/local/lib
     pattern: "*rdkafka*"
     file_type: file
     recurse: yes
   register: librdkafka_result
 
-- name: librdkafka | cleanup existing installation
+- name: Librdkafka | cleanup existing installation
+  when: librdkafka_cleanup_if_exists and librdkafka_result.matched > 1
   block: 
-    - name:  librdkafka | remove static files
-      file:
+    - name:  Librdkafka | remove static files
+      ansible.builtin.file:
         name: "{{ item.path }}"
         state: absent
       loop: "{{ librdkafka_result.files }}"
 
-    - name:  librdkafka | remove any existing apt version
-      apt:
+    - name:  Librdkafka | remove any existing apt version
+      ansible.builtin.apt:
         name: librdkafka*
         state: absent
-  when: librdkafka_cleanup_if_exists and librdkafka_result.matched > 1
 
-- name: librdkafka | install library
+- name: Librdkafka | install library
+  when: librdkafka_result.matched < 1 or librdkafka_cleanup_if_exists
   block:
-    - name: librdkafka | download archive from GitHub
-      get_url: 
+    - name: Librdkafka | download archive from GitHub
+      ansible.builtin.get_url: 
         url: "https://github.com/edenhill/librdkafka/archive/{{ librdkafka_version }}.tar.gz"
         dest: "/tmp/librdkafka.tar.gz"
         checksum: "{{ librdkafka_checksum | default(omit) }}"
         force: "{{ librdkafka_cleanup_if_exists }}"
         mode: 0775
 
-    - name: librdkafka | create destination folder
-      file:
+    - name: Librdkafka | create destination folder
+      ansible.builtin.file:
         path: /tmp/librdkafka-{{ librdkafka_version }}
         state: directory
         mode: 0775
 
-    - name: librdkafka | extract .tar archive
-      unarchive:
+    - name: Librdkafka | extract .tar archive
+      ansible.builtin.unarchive:
         src: /tmp/librdkafka.tar.gz
         dest: /tmp/librdkafka-{{ librdkafka_version }}
         extra_opts: [--strip-components=1]
         remote_src: yes
         mode: 0775
 
-    - name: librdkafka | compile source code
-      shell:
+    - name: Librdkafka | compile source code
+      ansible.builtin.shell:
         cmd: |
           set -o pipefail
           ./configure {{ librdkafka_build_opts | default('') }} && \
@@ -66,12 +67,12 @@
         chdir: /tmp/librdkafka-{{ librdkafka_version }}/
         warn: no
         executable: /bin/bash
+      tags: ['molecule-idempotence-notest', 'skip_ansible_lint']
 
-    - name: librdkafka | cleanup tmp
-      file:
+    - name: Librdkafka | cleanup tmp
+      ansible.builtin.file:
         path: "{{ item }}"
         state: absent
       loop:
         - /tmp/librdkafka.tar.gz
         - "/tmp/librdkafka-{{ librdkafka_version }}"
-  when: librdkafka_result.matched < 1 or librdkafka_cleanup_if_exists
