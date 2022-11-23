@@ -1,6 +1,8 @@
 librdkafka
 =========
 
+[![Build](https://github.com/rgsystemes/ansible-role-librdkafka/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/rgsystemes/ansible-role-librdkafka/actions/workflows/build.yml)
+
 Installs [edenhill/librdkafka](https://github.com/edenhill/librdkafka) from sources on **Debian/Ubuntu**. 
 
 Tested with :
