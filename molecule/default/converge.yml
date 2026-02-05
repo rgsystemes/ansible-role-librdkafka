@@ -1,6 +1,12 @@
 ---
 - name: Converge
   hosts: all
-  gather_facts: yes
+  gather_facts: true
+
+  vars:
+    librdkafka_version: "{{ lookup('env', 'LIBRDKAFKA_VERSION') }}"
+    librdkafka_checksum: "{{ lookup('env', 'LIBRDKAFKA_CHECKSUM') }}"
+    librdkafka_build_opts: --install-deps
+
   roles:
     - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
