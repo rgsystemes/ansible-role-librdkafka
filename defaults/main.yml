@@ -1,6 +1,9 @@
 ---
-librdkafka_cleanup_if_exists: false # Turn to true if you wish to overwrite existing assets (weither it comes from source or apt). Usefull for upgrade/downgrade.
-librdkafka_version: v1.9.2 # the release number to get from GitHub. See: https://github.com/edenhill/librdkafka/releases 
-# librdkafka_checksum: # specify matching SHA256's checksum if you want to
-# See: https://github.com/edenhill/librdkafka#building 
+# Turn to true if you wish to overwrite existing assets (weither it comes from source or apt)
+# Usefull for upgrade/downgrade.
+librdkafka_cleanup_if_exists: false
+# The release number to get from GitHub. See: https://github.com/edenhill/librdkafka/releases
+librdkafka_version: v1.9.2
+librdkafka_checksum: sha256:3fba157a9f80a0889c982acdd44608be8a46142270a389008b22d921be1198ad
+# See: https://github.com/edenhill/librdkafka#building
 librdkafka_build_opts: --install-deps

@@ -3,13 +3,13 @@
   hosts: all
   gather_facts: false
 
-  tasks: 
+  tasks:
     - name: Look for compiled assets
       ansible.builtin.find:
         path: /usr/local/lib
         pattern: "*rdkafka*"
         file_type: file
-        recurse: yes
+        recurse: true
       register: librdkafka_search
 
     - name: Ensure search has results

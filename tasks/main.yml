@@ -15,19 +15,19 @@
     path: /usr/local/lib
     pattern: "*rdkafka*"
     file_type: file
-    recurse: yes
+    recurse: true
   register: librdkafka_result
 
 - name: Librdkafka | cleanup existing installation
   when: librdkafka_cleanup_if_exists and librdkafka_result.matched > 1
-  block: 
-    - name:  Librdkafka | remove static files
+  block:
+    - name: Librdkafka | remove static files
       ansible.builtin.file:
         name: "{{ item.path }}"
         state: absent
       loop: "{{ librdkafka_result.files }}"
 
-    - name:  Librdkafka | remove any existing apt version
+    - name: Librdkafka | remove any existing apt version
       ansible.builtin.apt:
         name: librdkafka*
         state: absent
@@ -36,7 +36,7 @@
   when: librdkafka_result.matched < 1 or librdkafka_cleanup_if_exists
   block:
     - name: Librdkafka | download archive from GitHub
-      ansible.builtin.get_url: 
+      ansible.builtin.get_url:
         url: "https://github.com/edenhill/librdkafka/archive/{{ librdkafka_version }}.tar.gz"
         dest: "/tmp/librdkafka.tar.gz"
         checksum: "{{ librdkafka_checksum | default(omit) }}"
@@ -54,7 +54,7 @@
         src: /tmp/librdkafka.tar.gz
         dest: /tmp/librdkafka-{{ librdkafka_version }}
         extra_opts: [--strip-components=1]
-        remote_src: yes
+        remote_src: true
         mode: 0775
 
     - name: Librdkafka | compile source code
