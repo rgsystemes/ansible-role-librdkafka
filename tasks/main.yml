@@ -62,11 +62,10 @@
         cmd: |
           set -o pipefail
           ./configure {{ librdkafka_build_opts | default('') }} && \
-          make -j{{ ansible_processor_cores }} && \
+          make -j{{ ansible_facts['processor_cores'] }} && \
           make install
         chdir: /tmp/librdkafka-{{ librdkafka_version }}/
         executable: /bin/bash
-      tags: ['molecule-idempotence-notest', 'skip_ansible_lint']
 
     - name: Librdkafka | cleanup tmp
       ansible.builtin.file:
