@@ -4,7 +4,7 @@ galaxy_info:
   namespace: rgsystemes
   author: Frank Fidanza
   company: RG System
-  description: Installs librdkafka from source for Debian/Ubuntu 
+  description: Installs librdkafka from source for Debian
   license: "license (BSD, MIT)"
   min_ansible_version: '2.13'
 
@@ -12,9 +12,7 @@ galaxy_info:
     - name: Debian
       versions:
         - bullseye
-    - name: Ubuntu
-      versions:
-        - jammy
+        - trixie
 
   galaxy_tags:
     - librdkafka

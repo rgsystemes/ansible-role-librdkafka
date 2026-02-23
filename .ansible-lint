@@ -1,10 +1,6 @@
 ---
-# https://docs.ansible.com/ansible-lint/rules/default_rules.html
-exclude_paths: 
-  - ../.ansible/roles/
-  - .cache/
-  - .github/
-verbosity: 1
-use_default_rules: true
-warn_list:
-  - no-log-password
+skip_list:
+  - 'yaml'
+  - 'risky-shell-pipe'
+  - 'no-handler'
+  - 'role-name'

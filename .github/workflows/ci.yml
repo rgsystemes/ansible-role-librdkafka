@@ -1,0 +1,72 @@
+---
+name: CI
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v6
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'  # Can't go to 3.14+ until Ansible 13.x
+
+      - name: Install test dependencies.
+        run: pip3 install yamllint
+
+      - name: Lint code.
+        run: |
+          yamllint .
+  molecule:
+    name: Molecule
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - distro: debian11
+            version: v1.9.2
+            checksum: sha256:3fba157a9f80a0889c982acdd44608be8a46142270a389008b22d921be1198ad
+          - distro: debian11
+            version: v2.12.1
+            checksum: sha256:ec103fa05cb0f251e375f6ea0b6112cfc9d0acd977dc5b69fdc54242ba38a16f
+          - distro: debian13
+            version: v1.9.2
+            checksum: sha256:3fba157a9f80a0889c982acdd44608be8a46142270a389008b22d921be1198ad
+          - distro: debian13
+            version: v2.12.1
+            checksum: sha256:ec103fa05cb0f251e375f6ea0b6112cfc9d0acd977dc5b69fdc54242ba38a16f
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'  # Can't go to 3.14+ until Ansible 13.x
+
+      - name: Install test dependencies.
+        run: pip3 install ansible molecule "molecule-plugins[docker]" docker
+
+      - name: Run Molecule tests.
+        run: molecule test
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_DISTRO: ${{ matrix.distro }}
+          LIBRDKAFKA_VERSION: ${{ matrix.version }}
+          LIBRDKAFKA_CHECKSUM: ${{ matrix.checksum }}
